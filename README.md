@@ -78,4 +78,32 @@ git clone [https://github.com/yourusername/JavaGuardian.git](https://github.com/
 ./gradlew shadowJar
 
 # 3. Run the tool
+
 java -jar build/libs/JavaGuardian-all.jar scan
+
+
+**METHOD 2**
+Install Java Guardian as a global command so youcan run "guardian scan" from any folder on your computer
+
+1. CREATE A TOOL DIRECTORY : Create a folder to keep the tool safe (eg: C:/Tools/JavaGuardian)
+and move JavaGuardian-all.jar inside it
+
+2. CREATE THE LAUNCHER SCRIPT : Inside the same folder, create a new file named "guardian.bat"
+and paste this code
+
+"@echo off
+ java -jar  "%~dp0JavaGuardian-all.jar" %* "
+
+3. UPDATE SYSTEM PATH :
+
+i. Search for "Edit the system environment variables" in Windows.
+ii. Click "Environment Variables".
+iii. Under "System variables", select Path and click Edit
+iv. Click New and paste the path to your folder  (eg: C:\Tools\JavaGuardian).
+v. Click OK on all windows.
+
+4. VERIFY INSTALLATION :
+Open a new terminal window and type :
+"guardian --help"
+
+NOW YOU CAN GO TO ANY PROJECT FOLDER ON YOUR COMPUTER AND SIMPLY RUN "guardian scan". 
