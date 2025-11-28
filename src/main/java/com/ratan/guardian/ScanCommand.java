@@ -24,7 +24,7 @@ public class ScanCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        ConsoleStyler.printBanner(); // <--- Print the cool logo
+        ConsoleStyler.printBanner();
 
         Path pomPath = Paths.get("pom.xml");
         if (!Files.exists(pomPath)) {
@@ -46,7 +46,7 @@ public class ScanCommand implements Callable<Integer> {
             return 0;
         }
 
-        // Print the Table Header
+        
         ConsoleStyler.printHeader();
 
         int outdatedCount = 0;
@@ -55,17 +55,23 @@ public class ScanCommand implements Callable<Integer> {
             String artifactKey = d.getGroupId() + ":" + d.getArtifactId();
             String currentVersion = d.getVersion();
             
-            // Fetch Latest
+            if (currentVersion == null) {
+
+                ConsoleStyler.printRow(artifactKey, "Inherited", "---", false);
+                continue; 
+            }
+            
+            
             String latestVersion = getLatestVersion(d.getGroupId(), d.getArtifactId());
             boolean isOutdated = !currentVersion.equals(latestVersion) && !latestVersion.equals("N/A");
 
             if (isOutdated) outdatedCount++;
 
-            // Print the pretty row
+
             ConsoleStyler.printRow(artifactKey, currentVersion, latestVersion, isOutdated);
         }
 
-        // Print the Footer Stats
+
         ConsoleStyler.printFooter(dependencies.size(), outdatedCount);
         
         return 0;

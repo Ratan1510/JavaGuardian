@@ -34,7 +34,7 @@ public class UpdateCommand implements Callable<Integer> {
 
         System.out.println("🔍 Scanning and updating dependencies...");
         
-        // 1. Read the pom.xml
+        
         MavenXpp3Reader reader = new MavenXpp3Reader();
         Model model;
         try (FileReader fileReader = new FileReader(pomPath.toFile())) {
@@ -49,9 +49,16 @@ public class UpdateCommand implements Callable<Integer> {
             return 0;
         }
 
-        // 2. Iterate and Update
+        
         for (Dependency d : dependencies) {
             String currentVersion = d.getVersion();
+            
+            
+            if (currentVersion == null) {
+                System.out.printf("   Skipping %s:%s (Inherited version)%n", d.getGroupId(), d.getArtifactId());
+                continue;
+            }
+
             System.out.printf("Checking %s:%s... ", d.getGroupId(), d.getArtifactId());
             
             String latestVersion = getLatestVersion(d.getGroupId(), d.getArtifactId());
@@ -59,7 +66,7 @@ public class UpdateCommand implements Callable<Integer> {
             if (!"N/A".equals(latestVersion) && !currentVersion.equals(latestVersion)) {
                 System.out.printf("⏬ Update found: %s -> %s%n", currentVersion, latestVersion);
                 
-                // Update the version in the model object
+                
                 d.setVersion(latestVersion);
                 changesMade = true;
             } else {
@@ -67,7 +74,7 @@ public class UpdateCommand implements Callable<Integer> {
             }
         }
 
-        // 3. Write changes back to file if needed
+        
         if (changesMade) {
             System.out.println("💾 Writing changes to pom.xml...");
             MavenXpp3Writer writer = new MavenXpp3Writer();
@@ -82,7 +89,7 @@ public class UpdateCommand implements Callable<Integer> {
         return 0;
     }
 
-    // Reuse the version fetching logic
+    
     private String getLatestVersion(String groupId, String artifactId) {
         String url = String.format("https://search.maven.org/solrsearch/select?q=g:\"%s\"+AND+a:\"%s\"&core=gav&rows=1&wt=json",
                 groupId, artifactId);
@@ -104,7 +111,7 @@ public class UpdateCommand implements Callable<Integer> {
         return "N/A";
     }
 
-    // Helper classes for JSON parsing
+    
     private static class MavenSearchResponse { ResponseData response; }
     private static class ResponseData { Doc[] docs; }
     private static class Doc { String v; }
