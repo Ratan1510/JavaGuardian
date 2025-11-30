@@ -72,7 +72,7 @@ java -jar JavaGuardian-all.jar update
 OPTION 2 Build from Source(Prerequisites: JDK 21+ )
 
 # 1. Clone the repository
-git clone [https://github.com/yourusername/JavaGuardian.git](https://github.com/yourusername/JavaGuardian.git)
+git clone [https://github.com/Ratan1510/JavaGuardian.git](https://github.com/yourusername/JavaGuardian.git)
 
 # 2. Build the project (creates a Fat JAR)
 ./gradlew shadowJar
@@ -107,3 +107,4 @@ Open a new terminal window and type :
 "guardian --help"
 
 NOW YOU CAN GO TO ANY PROJECT FOLDER ON YOUR COMPUTER AND SIMPLY RUN "guardian scan". 
+
